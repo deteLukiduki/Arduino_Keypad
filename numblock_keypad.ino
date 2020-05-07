@@ -1,14 +1,17 @@
 #include <Keypad.h>
 #include <Keyboard.h>
 
-const byte ROWS = 4;
-const byte COLS = 5;
 
 bool numLock = false;
 bool numMode = true;
 byte makroMode = 0; //TODO implement makro mode
 
-// 2d array with keys
+/*==== Keypad setup ====*/
+
+const byte ROWS = 4;
+const byte COLS = 5;
+
+// key matrix mapping with all keycodes
 byte numBlock[ROWS][COLS] = {
   {234, 225, 228, 231, 219},
   {235, 226, 229, 232, 220},
@@ -23,13 +26,12 @@ Keypad customKeypad = Keypad(makeKeymap(numBlock), rowPins, colPins, ROWS, COLS)
 
 void setup() {
   pinMode(13, OUTPUT);
-  Serial.begin(9600);
   Keyboard.begin();
 }
 
-void loop(){
-byte customKey = customKeypad.getKey();
-  if (customKey){
+void loop() {
+  byte customKey = customKeypad.getKey();
+  if (customKey) {
     Keyboard.press(customKey);
     Keyboard.release(customKey);
     if (customKey == byte(219))
@@ -37,15 +39,15 @@ byte customKey = customKeypad.getKey();
   }
 }
 
+
+// enable/disable NumLock LED
 void switchNumLED()
 {
-    Serial.println("Hallo");
-      numLock = !numLock;
-      Serial.println(numLock);
-      if (numLock){
-        analogWrite(13, 100);
-      }
-      else{
-          analogWrite(13, 0);
-      }
+  numLock = !numLock;
+  if (numLock) {
+    analogWrite(13, 100);
+  }
+  else {
+    analogWrite(13, 0);
+  }
 }
